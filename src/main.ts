@@ -1,32 +1,36 @@
-/**
- * Some predefined delay values (in milliseconds).
- */
-export enum Delays {
-  Short = 500,
-  Medium = 2000,
-  Long = 5000,
+import cex from './cex';
+import { push } from './subs';
+
+const TIME_INTERVAL = 30 * 1000;
+
+const repeatCheck = (cex: string, func: () => Promise<unknown[] | null>) => {
+  setTimeout(async () => {
+    const newList = await func();
+    if (newList && newList.length > 0) {
+      newList.forEach(async (item: NewListToken) => {
+        await push({
+          cex,
+          title: item.title,
+          link: '',
+          token: item.name,
+          symbol: item.token,
+          timestamp: Date.now(),
+        })
+      })
+    } else {
+      console.log('未发现新的上币信息', Date.now())
+    }
+    repeatCheck(cex, func);
+  }, TIME_INTERVAL);
 }
 
-/**
- * Returns a Promise<string> that resolves after a given time.
- *
- * @param {string} name - A name.
- * @param {number=} [delay=Delays.Medium] - A number of milliseconds to delay resolution of the Promise.
- * @returns {Promise<string>}
- */
-function delayedHello(
-  name: string,
-  delay: number = Delays.Medium,
-): Promise<string> {
-  return new Promise((resolve: (value?: string) => void) =>
-    setTimeout(() => resolve(`Hello, ${name}`), delay),
-  );
+const runTask = async function (item: CexConfItem) {
+  try {
+    await item.methods.init();
+    repeatCheck(`${item.cn_name}(${item.name})`, item.methods.check);
+  } catch (err) {
+    console.log(err);
+  }
 }
-
-// Below are examples of using ESLint errors suppression
-// Here it is suppressing a missing return type definition for the greeter function.
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export async function greeter(name: string) {
-  return await delayedHello(name, Delays.Long);
-}
+// init
+cex.forEach(runTask)

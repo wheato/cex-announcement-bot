@@ -30,9 +30,12 @@
     "test": "jest --coverage",
     "test:watch": "jest --watch"
   },
-  "author": "Jakub Synowiec <jsynowiec@users.noreply.github.com>",
+  "author": "wheato",
   "license": "Apache-2.0",
   "dependencies": {
+    "axios": "^0.24.0",
+    "dayjs": "^1.10.7",
+    "discord.js": "^13.3.1",
     "tslib": "~2.3.1"
   },
   "volta": {
