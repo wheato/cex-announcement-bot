@@ -1,0 +1,10 @@
+{
+    "uid": "cex-bot",
+    "append": true,
+    "watch": true,
+    "script": "build/src/main.js",
+    "sourceDir": "/root/apps/cex-announcement-bot",
+    "logFile": "/root/apps/cex-announcement-bot/logs/forever.log",
+    "outFile": "/root/apps/cex-announcement-bot/logs/out.log",
+    "errFile": "/root/apps/cex-announcement-bot/logs/error.log"
+}
