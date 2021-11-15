@@ -13,7 +13,14 @@ let historyListed = {};
 
 async function requestAndParse() {
   try {
-    const { data } = await axios.get(TARGET_URL);
+    const { data } = await axios.get(TARGET_URL, {
+      params: {
+        ttt: Date.now()
+      },
+      headers: {
+        'Cache-Control': 'no-cache'
+      }
+    });
     const html = (data || '') as string;
     const result = html.matchAll(/Binance Will List ([0-9|a-z|A-Z|\s]+) \(([0-9|a-z|A-Z]+)\)/g);
     const listed: ListedTokens = {};
@@ -55,6 +62,8 @@ export async function check() {
         name,
         title,
       } as NewListToken);
+      console.log('============= New =============');
+      console.log(name, Date.now());
     })
     return newList.length > 0 ? newList : null;
   } catch (err) {

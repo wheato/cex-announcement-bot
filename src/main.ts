@@ -1,7 +1,7 @@
 import cex from './cex';
 import { push } from './subs';
 
-const TIME_INTERVAL = 30 * 1000;
+const TIME_INTERVAL = 20 * 1000;
 
 const repeatCheck = (cex: string, func: () => Promise<unknown[] | null>) => {
   setTimeout(async () => {
@@ -17,8 +17,6 @@ const repeatCheck = (cex: string, func: () => Promise<unknown[] | null>) => {
           timestamp: Date.now(),
         })
       })
-    } else {
-      console.log('未发现新的上币信息', Date.now())
     }
     repeatCheck(cex, func);
   }, TIME_INTERVAL);
